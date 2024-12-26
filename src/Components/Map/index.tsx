@@ -1,6 +1,6 @@
-import L from "leaflet";
-import React, { useEffect, useRef } from "react";
-import { useSelectedLocation } from "../../Context/SelectedLocation";
+import L from 'leaflet'
+import React, { useEffect, useRef } from 'react'
+import { useSelectedLocation } from '../../Context/SelectedLocation'
 
 const liveIcon = L.divIcon({
   html: `
@@ -11,70 +11,70 @@ const liveIcon = L.divIcon({
       <div class="live-icon-arrow" style="position: absolute; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 12px solid #007aff; transform: rotate(0deg); top: 6px; transform-origin: center 36px;"></div>
     </div>`,
   popupAnchor: [0, -28],
-});
+})
 
 const Map: React.FC = () => {
-  const mapRef = useRef<L.Map | null>(null);
-  const markerRef = useRef<L.Marker | null>(null);
-  const darkMode = false;
+  const mapRef = useRef<L.Map | null>(null)
+  const markerRef = useRef<L.Marker | null>(null)
+  const darkMode = false
 
-  const { selectedLocation } = useSelectedLocation();
+  const { selectedLocation } = useSelectedLocation()
 
   useEffect(() => {
-    const map = L.map("map", {
+    const map = L.map('map', {
       center: [1.3521, 103.8198],
       zoom: 13,
-    });
-    mapRef.current = map;
+    })
+    mapRef.current = map
 
     const baseMapUrl = (style: string) =>
-      `https://www.onemap.gov.sg/maps/tiles/${style}/{z}/{x}/{y}.png`;
-    const tileLayer = darkMode ? "Night" : "Default";
+      `https://www.onemap.gov.sg/maps/tiles/${style}/{z}/{x}/{y}.png`
+    const tileLayer = darkMode ? 'Night' : 'Default'
     L.tileLayer(baseMapUrl(tileLayer), {
       detectRetina: true,
       maxZoom: 19,
       minZoom: 11,
-    }).addTo(map);
+    }).addTo(map)
 
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
+          const { latitude, longitude } = position.coords
           if (markerRef.current) {
-            markerRef.current.setLatLng([latitude, longitude]);
+            markerRef.current.setLatLng([latitude, longitude])
           } else {
             markerRef.current = L.marker([latitude, longitude], {
               icon: liveIcon,
-            }).addTo(map);
+            }).addTo(map)
           }
-          map.setView([latitude, longitude], 16);
+          map.setView([latitude, longitude], 16)
         },
         (error) => {
-          console.error(error);
+          console.error(error)
         },
         { enableHighAccuracy: true }
-      );
+      )
     }
 
     if (selectedLocation?.LATTITUDE && selectedLocation?.LONGTITUDE) {
-      const { LATTITUDE, LONGTITUDE } = selectedLocation;
-      const lat = parseFloat(LATTITUDE);
-      const lng = parseFloat(LONGTITUDE);
+      const { LATTITUDE, LONGTITUDE } = selectedLocation
+      const lat = parseFloat(LATTITUDE)
+      const lng = parseFloat(LONGTITUDE)
       markerRef.current = L.marker([lat, lng], {
         icon: liveIcon,
-      }).addTo(map);
-      map.setView([lat, lng], 16);
+      }).addTo(map)
+      map.setView([lat, lng], 16)
     }
 
     return () => {
       if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
+        mapRef.current.remove()
+        mapRef.current = null
       }
-    };
-  }, [selectedLocation]);
+    }
+  }, [selectedLocation])
 
-  return <div id="map" className="lg:h-[90vh] h-[93vh] w-full" />;
-};
+  return <div id="map" className="h-[87vh] w-full" />
+}
 
-export default Map;
+export default Map
