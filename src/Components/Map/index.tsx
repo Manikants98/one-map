@@ -70,7 +70,7 @@ const Map: React.FC = () => {
     }
   }, [selectedLocation])
 
-  return <div id="map" className="h-[87.5vh] w-full" />
+  return <div id="map" className="h-[87.7vh] w-full" />
 }
 
 export default Map
