@@ -27,10 +27,8 @@ const Map: React.FC = () => {
     })
     mapRef.current = map
 
-    const baseMapUrl = (style: string) =>
-      `https://www.onemap.gov.sg/maps/tiles/${style}/{z}/{x}/{y}.png`
-    const tileLayer = darkMode ? 'Night' : 'Default'
-    L.tileLayer(baseMapUrl(tileLayer), {
+    const baseMapUrl = () => `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`
+    L.tileLayer(baseMapUrl(), {
       detectRetina: true,
       maxZoom: 19,
       minZoom: 11,
