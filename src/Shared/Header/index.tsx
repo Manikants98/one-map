@@ -34,7 +34,7 @@ const Header: React.FC = () => {
     <div className="lg:p-4 p-1 bg-[#B71141] flex justify-between items-center">
       <Sidebar />
       <div className="relative">
-        <div className="flex lg:bg-white items-center rounded px-2 relative w-80 lg:w-96">
+        <div className="flex lg:bg-white items-center rounded px-2 relative w-72 lg:w-96">
           <LocationOnOutlined className="text-white lg:text-black" />
           <input
             value={search}

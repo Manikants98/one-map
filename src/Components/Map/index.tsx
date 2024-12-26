@@ -49,9 +49,7 @@ const Map: React.FC = () => {
           }
           map.setView([latitude, longitude], 16)
         },
-        (error) => {
-          console.error(error)
-        },
+        (error) => console.error(error),
         { enableHighAccuracy: true }
       )
     }
@@ -74,7 +72,7 @@ const Map: React.FC = () => {
     }
   }, [selectedLocation])
 
-  return <div id="map" className="h-[87vh] w-full" />
+  return <div id="map" className="h-[87.5vh] w-full" />
 }
 
 export default Map
