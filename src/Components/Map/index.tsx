@@ -16,7 +16,7 @@ const liveIcon = L.divIcon({
 const Map: React.FC = () => {
   const mapRef = useRef<L.Map | null>(null)
   const markerRef = useRef<L.Marker | null>(null)
-  const darkMode = false
+  // const darkMode = false
 
   const { selectedLocation } = useSelectedLocation()
 
