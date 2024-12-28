@@ -13,7 +13,7 @@ const Home: React.FC = () => {
           <img
             src="https://officialguidemap.com:5173/src/assets/icons/grid.png"
             alt=""
-            className="p-2 bg-white border rounded size-10 lg:size-[42px]"
+            className="p-2 bg-white !border !border-black !border-opacity-50 rounded size-10 lg:size-[42px]"
           />
         </Button>
 
