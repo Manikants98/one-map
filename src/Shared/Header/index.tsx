@@ -1,11 +1,11 @@
 import { LocationOnOutlined, Search } from '@mui/icons-material'
-import React, { useState } from 'react'
-import Sidebar from '../Sidebar'
-import { useQuery } from '@tanstack/react-query'
-import { Location, searchLocationsFn } from '../../Services/SearchLocation'
-import useDebounce from '../../Hooks/useDebounce'
-import { useSelectedLocation } from '../../Context/SelectedLocation'
 import { Collapse } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import React, { useState } from 'react'
+import { useDebounce } from 'react-mkx-toolkit'
+import { useSelectedLocation } from 'Context/SelectedLocation'
+import { Location, searchLocationsFn } from 'Services/SearchLocation'
+import Sidebar from 'Shared/Sidebar'
 
 const Header: React.FC = () => {
   const [search, setSearch] = useState('')
@@ -34,12 +34,12 @@ const Header: React.FC = () => {
     <div className="lg:p-4 p-1 bg-[#B71141] flex justify-between items-center">
       <Sidebar />
       <div className="relative">
-        <div className="flex lg:bg-white items-center rounded px-2 relative w-72 lg:w-96">
+        <div className="relative flex items-center px-2 rounded lg:bg-white w-72 lg:w-96">
           <LocationOnOutlined className="text-white lg:text-black" />
           <input
             value={search}
             placeholder="Ex. Marina Bay"
-            className="outline-none p-2 lg:text-black text-white lg:bg-white lg:placeholder:text-black lg:placeholder:text-opacity-60 placeholder:text-white placeholder:text-opacity-60 bg-transparent rounded w-full"
+            className="w-full p-2 text-white bg-transparent rounded outline-none lg:text-black lg:bg-white lg:placeholder:text-black lg:placeholder:text-opacity-60 placeholder:text-white placeholder:text-opacity-60"
             onChange={handleInputChange}
           />
           <Search className="text-white lg:text-black" />

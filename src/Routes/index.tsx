@@ -1,22 +1,22 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes as Router } from "react-router-dom";
-import Layout from "../Layout";
-import Home from "../Pages/Home";
-import Loader from "../Shared/Loader";
+import Layout from 'Layout'
+import Home from 'Pages/Home'
+import React, { Suspense } from 'react'
+import { BrowserRouter, Route, Routes as Router } from 'react-router-dom'
+import Loader from 'Shared/Loader'
 
 interface RouteType {
-  id: number;
-  path: string;
-  element: React.ReactNode;
+  id: number
+  path: string
+  element: React.ReactNode
 }
 
 const routes: RouteType[] = [
   {
     id: 1,
-    path: "/",
+    path: '/',
     element: <Home />,
   },
-];
+]
 
 const Routes = () => {
   return (
@@ -31,7 +31,7 @@ const Routes = () => {
         </Router>
       </Suspense>
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default Routes;
+export default Routes

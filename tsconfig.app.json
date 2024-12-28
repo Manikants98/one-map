@@ -18,7 +18,23 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "src",
+    "paths": {
+      "*": ["*"],
+      "Routes": ["./Routes"],
+      "Components": ["./Components"],
+      "Configs": ["./Configs"],
+      "Context": ["./Context"],
+      "Hooks": ["./Hooks"],
+      "Layout": ["./Layout"],
+      "Mock": ["./Mock"],
+      "Pages": ["./Pages"],
+      "Resources": ["./Resources"],
+      "Schemas": ["./Schemas"],
+      "Services": ["./Services"],
+      "Shared": ["./Shared"]
+    }
   },
   "include": ["src"]
 }

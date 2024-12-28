@@ -1,6 +1,7 @@
 import L from 'leaflet'
 import React, { useEffect, useRef } from 'react'
-import { useSelectedLocation } from '../../Context/SelectedLocation'
+import { useSelectedLocation } from 'Context/SelectedLocation'
+import { useThemeContext } from 'Context/Theme'
 
 const liveIcon = L.divIcon({
   html: `
@@ -16,51 +17,24 @@ const liveIcon = L.divIcon({
 const Map: React.FC = () => {
   const mapRef = useRef<L.Map | null>(null)
   const markerRef = useRef<L.Marker | null>(null)
-  // const darkMode = false
-
   const { selectedLocation } = useSelectedLocation()
+  const { mode } = useThemeContext()
+  const darkMode = mode === 'dark'
 
   useEffect(() => {
-    const map = L.map('map', {
-      center: [1.3521, 103.8198],
-      zoom: 13,
-    })
+    const map = L.map('map')
     mapRef.current = map
 
-    const baseMapUrl = () => `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`
-    L.tileLayer(baseMapUrl(), {
+    const baseMapUrl = (style: string): string =>
+      `https://www.onemap.gov.sg/maps/tiles/${style}/{z}/{x}/{y}.png`
+
+    const tileLayer = darkMode ? 'Night' : 'Default'
+
+    L.tileLayer(baseMapUrl(tileLayer), {
       detectRetina: true,
       maxZoom: 19,
       minZoom: 11,
     }).addTo(map)
-
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          if (markerRef.current) {
-            markerRef.current.setLatLng([latitude, longitude])
-          } else {
-            markerRef.current = L.marker([latitude, longitude], {
-              icon: liveIcon,
-            }).addTo(map)
-          }
-          map.setView([latitude, longitude], 16)
-        },
-        (error) => console.error(error),
-        { enableHighAccuracy: true }
-      )
-    }
-
-    if (selectedLocation?.LATTITUDE && selectedLocation?.LONGTITUDE) {
-      const { LATTITUDE, LONGTITUDE } = selectedLocation
-      const lat = parseFloat(LATTITUDE)
-      const lng = parseFloat(LONGTITUDE)
-      markerRef.current = L.marker([lat, lng], {
-        icon: liveIcon,
-      }).addTo(map)
-      map.setView([lat, lng], 16)
-    }
 
     return () => {
       if (mapRef.current) {
@@ -68,9 +42,56 @@ const Map: React.FC = () => {
         mapRef.current = null
       }
     }
+  }, [darkMode])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    // Set initial marker
+    const initialLat = selectedLocation?.LATTITUDE || 1.3521 // Fallback: Singapore lat
+    const initialLng = selectedLocation?.LONGTITUDE || 103.8198 // Fallback: Singapore lng
+    const marker = L.marker([initialLat as number, initialLng as number], { icon: liveIcon }).addTo(
+      map
+    )
+    markerRef.current = marker
+
+    const updateMarkerPosition = (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords
+      marker.setLatLng([latitude, longitude])
+    }
+
+    const watchId = navigator.geolocation.watchPosition(
+      updateMarkerPosition,
+      (error) => console.error('Error watching position:', error),
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 200000 }
+    )
+
+    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+      const alpha = event.alpha || 0
+      const correctedAlpha = (360 - alpha) % 360
+      const element = document.getElementById('live-icon')
+      if (element) {
+        element.style.transform = `translate(-50%, -50%) rotate(${correctedAlpha}deg)`
+      }
+    }
+
+    window.addEventListener('deviceorientation', handleDeviceOrientation)
+
+    // Fit bounds to marker
+    map.fitBounds([[initialLat as number, initialLng as number]], { padding: [50, 50] })
+
+    return () => {
+      // Cleanup geolocation and event listeners
+      navigator.geolocation.clearWatch(watchId)
+      window.removeEventListener('deviceorientation', handleDeviceOrientation)
+      if (markerRef.current) {
+        markerRef.current.remove()
+      }
+    }
   }, [selectedLocation])
 
-  return <div id="map" className="h-[87.7vh] w-full" />
+  return <div id="map" className="lg:h-[83.6vh] h-[87.5vh] w-full" />
 }
 
 export default Map

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
-import { Category, featuredCategoriesFn } from '../../Services/Categories'
+import { Category, featuredCategoriesFn } from 'Services/Categories'
 import { Chip, Skeleton } from '@mui/material'
-import { baseURL } from '../../Config'
+import { baseURL } from 'Configs'
 
 const Categories: React.FC = () => {
   const [selected, setSelected] = useState<Category>({} as Category)
@@ -15,7 +15,7 @@ const Categories: React.FC = () => {
   const categories = data?.data
 
   return (
-    <div className="flex p-1.5 gap-2 overflow-x-auto">
+    <div className="flex p-1.5 dark:bg-black dark:bg-opacity-90 gap-2 overflow-x-auto">
       {isLoading
         ? Array.from({ length: 10 }).map((_, index) => (
             <Skeleton key={index} className="!rounded-full !h-8 !w-96 !scale-100" />
